@@ -39,7 +39,7 @@ namespace Barbar.TreeDistance.Util
          *         leading and tailing spaces is returned; if the field does not
          *         exist or the parameter line is null than null is returned
          */
-        public static string getField(int fieldNr, string line,
+        public static string GetField(int fieldNr, string line,
             char seperator)
         {
             if (line != null)
@@ -52,7 +52,7 @@ namespace Barbar.TreeDistance.Util
                     {
                         return null;
                     }
-                    pos = pos + 1;
+                    pos++;
                 }
                 int pos2 = line.IndexOf(seperator, pos);
                 string res;
@@ -78,7 +78,7 @@ namespace Barbar.TreeDistance.Util
          * @param separator
          * @return new string[0] for empty or null lines, string-array containing fields, otherwise
          */
-        public static string[] getFields(string line,
+        public static string[] GetFields(string line,
             char separator)
         {
             if ((line != null) && (!line.Equals("")))
@@ -107,17 +107,17 @@ namespace Barbar.TreeDistance.Util
             }
         }
 
-        public static string[] getFields(string line, char separator, char quote)
+        public static string[] GetFields(string line, char separator, char quote)
         {
-            string[] parse = getFields(line, separator);
+            string[] parse = GetFields(line, separator);
             for (int i = 0; i < parse.Length; i++)
             {
-                parse[i] = stripQuotes(parse[i], quote);
+                parse[i] = StripQuotes(parse[i], quote);
             }
             return (parse);
         }
 
-        public static string stripQuotes(string s, char quote)
+        public static string StripQuotes(string s, char quote)
         {
             if ((s.Length >= 2) && (s[0] == quote) && (s[s.Length - 1] == quote))
             {
@@ -129,12 +129,12 @@ namespace Barbar.TreeDistance.Util
             }
         }
 
-        public static string resizeEnd(string s, int size)
+        public static string ResizeEnd(string s, int size)
         {
-            return resizeEnd(s, size, ' ');
+            return ResizeEnd(s, size, ' ');
         }
 
-        public static string getRandomString(int length)
+        public static string GetRandomString(int length)
         {
             var r = new Random();
             string str = "";
@@ -145,7 +145,7 @@ namespace Barbar.TreeDistance.Util
             return str;
         }
 
-        public static string resizeEnd(string s, int size, char fillChar)
+        public static string ResizeEnd(string s, int size, char fillChar)
         {
             string res;
             try
@@ -163,12 +163,12 @@ namespace Barbar.TreeDistance.Util
             return res;
         }
 
-        public static string resizeFront(string s, int size)
+        public static string ResizeFront(string s, int size)
         {
-            return resizeFront(s, size, ' ');
+            return ResizeFront(s, size, ' ');
         }
 
-        public static string resizeFront(string s, int size, char fillChar)
+        public static string ResizeFront(string s, int size, char fillChar)
         {
             string res;
             try
@@ -186,7 +186,7 @@ namespace Barbar.TreeDistance.Util
             return res;
         }
 
-        public static int matchingBracket(string s, int pos)
+        public static int MatchingBracket(string s, int pos)
         {
             if ((s == null) || (pos > s.Length - 1))
             {
@@ -237,7 +237,7 @@ namespace Barbar.TreeDistance.Util
         }
 
 
-        public static int getTreeID(string s)
+        public static int GetTreeID(string s)
         {
             if ((s != null) && (s.Length > 0))
             {
@@ -257,7 +257,7 @@ namespace Barbar.TreeDistance.Util
             }
         }
 
-        public static string getRoot(string s)
+        public static string GetRoot(string s)
         {
             if ((s != null) && (s.Length > 0) && s.StartsWith("{") && s.EndsWith("}"))
             {
@@ -286,7 +286,7 @@ namespace Barbar.TreeDistance.Util
                 }
                 string rest = s.JavaSubstring(end, s.Length - 1);
                 int match = 0;
-                while ((rest.Length > 0) && ((match = matchingBracket(rest, 0)) != -1))
+                while ((rest.Length > 0) && ((match = MatchingBracket(rest, 0)) != -1))
                 {
                     children.Add(rest.JavaSubstring(0, match + 1));
                     if (match + 1 < rest.Length)
@@ -306,7 +306,7 @@ namespace Barbar.TreeDistance.Util
             }
         }
 
-        public static string parseTree(string s, List<string> children)
+        public static string ParseTree(string s, List<string> children)
         {
             children.Clear();
             string root;
@@ -321,7 +321,7 @@ namespace Barbar.TreeDistance.Util
                 root = s.JavaSubstring(1, end);
                 string rest = s.JavaSubstring(end, s.Length - 1);
                 int match = 0;
-                while ((rest.Length > 0) && (match = matchingBracket(rest, 0)) != -1)
+                while ((rest.Length > 0) && (match = MatchingBracket(rest, 0)) != -1)
                 {
                     children.Add(rest.JavaSubstring(0, match + 1));
                     if (match + 1 < rest.Length)
@@ -341,7 +341,7 @@ namespace Barbar.TreeDistance.Util
             }
         }
 
-        public static string commaSeparatedList(string[] list)
+        public static string CommaSeparatedList(string[] list)
         {
             var s = new StringBuilder();
             for (int i = 0; i < list.Length; i++)
@@ -363,7 +363,7 @@ namespace Barbar.TreeDistance.Util
          * @param quote
          * @return
          */
-        public static string commaSeparatedList(string[] list, char quote)
+        public static string CommaSeparatedList(string[] list, char quote)
         {
             StringBuilder s = new StringBuilder();
             for (int i = 0; i < list.Length; i++)
@@ -384,7 +384,7 @@ namespace Barbar.TreeDistance.Util
          * @param num input string with numeric characters
          * @return num with numeric characters replaced
          */
-        public static string spellOutNumber(string num)
+        public static string SpellOutNumber(string num)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < num.Length; i++)
@@ -408,7 +408,7 @@ namespace Barbar.TreeDistance.Util
             return sb.ToString();
         }
 
-        public static string substituteBlanks(string s, string subst)
+        public static string SubstituteBlanks(string s, string subst)
         {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < s.Length; i++)
@@ -425,7 +425,7 @@ namespace Barbar.TreeDistance.Util
             return sb.ToString();
         }
 
-        public static string escapeLatex(string s)
+        public static string EscapeLatex(string s)
         {
             var sb = new StringBuilder();
             foreach(char cr in s)

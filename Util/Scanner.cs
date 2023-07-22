@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Barbar.TreeDistance.Util
 {
@@ -12,7 +12,7 @@ namespace Barbar.TreeDistance.Util
             m_Tokens = line.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
-        public bool hasNextInt()
+        public bool HasNextInt()
         {
             if (m_Index >= m_Tokens.Length)
             {
@@ -28,7 +28,7 @@ namespace Barbar.TreeDistance.Util
             return false;
         }
 
-        public int nextInt()
+        public int NextInt()
         {
             for (var i = m_Index; i <= m_Tokens.Length; i++)
             {

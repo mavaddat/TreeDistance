@@ -49,7 +49,7 @@ namespace Barbar.TreeDistance.Util {
          * @param label add this label to the dictionary if it does not exist yet
          * @return ID of label in the dictionary
          */
-        public int store(string label) {
+        public int Store(string label) {
             if (StrInt.ContainsKey(label)) {
                 return (StrInt[label]);
             } else if (!newLabelsAllowed) {
@@ -69,21 +69,21 @@ namespace Barbar.TreeDistance.Util {
          * @param labelID 
          * @return the label with the specified labelID, or null if this dictionary contains no label for labelID
          */
-        public string read(int labelID) {
+        public string Read(int labelID) {
             return IntStr[labelID];
         }
 
         /**
          * @return true iff new labels can be stored into this label dictinoary
          */
-        public bool isNewLabelsAllowed() {
+        public bool IsNewLabelsAllowed() {
             return newLabelsAllowed;
         }
 
         /**
          * @param newLabelsAllowed the newLabelsAllowed to set
          */
-        public void setNewLabelsAllowed(bool newLabelsAllowed) {
+        public void SetNewLabelsAllowed(bool newLabelsAllowed) {
             this.newLabelsAllowed = newLabelsAllowed;
         }
     }

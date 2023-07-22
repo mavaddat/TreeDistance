@@ -190,7 +190,7 @@ namespace Barbar.TreeDistance.Util
          */
         public static void Main(string[] args) {
             RTEDCommandLine rtedCL = new RTEDCommandLine();
-            rtedCL.runCommandLine(args);
+            rtedCL.RunCommandLine(args);
         }
 
         /**
@@ -198,7 +198,7 @@ namespace Barbar.TreeDistance.Util
          * 
          * @param args
          */
-        public void runCommandLine(string[] args) {
+        public void RunCommandLine(string[] args) {
             rted = new RTED_InfoTree_Opt(1, 1, 1);
             try
             {
@@ -207,12 +207,12 @@ namespace Barbar.TreeDistance.Util
                         Console.Out.WriteLine(helpMessage);
                         Environment.Exit(0);
                     } else if (args[i].Equals("-t") || args[i].Equals("--trees")) {
-                        parseTreesFromCommandLine(args[i + 1], args[i + 2]);
-                        i = i + 2;
+                        ParseTreesFromCommandLine(args[i + 1], args[i + 2]);
+                        i += 2;
                         run = true;
                     } else if (args[i].Equals("-f") || args[i].Equals("--files")) {
-                        parseTreesFromFiles(args[i + 1], args[i + 2]);
-                        i = i + 2;
+                        ParseTreesFromFiles(args[i + 1], args[i + 2]);
+                        i += 2;
                         run = true;
                     } else if (args[i].Equals("-l") || args[i].Equals("--ZhangShashaLeft")) {
                         sota = true;
@@ -236,18 +236,18 @@ namespace Barbar.TreeDistance.Util
                     } else if (args[i].Equals("-s") || args[i].Equals("--strategy")) {
                         custom = true;
                         customStrategy = args[i + 1];
-                        i = i + 1;
+                        i++;
                         strategy = true;
                     } else if (args[i].Equals("-a") || args[i].Equals("--strategy-array")) {
                         array = true;
                         customStrategyArrayFile = args[i + 1];
-                        i = i + 1;
+                        i++;
                         strategy = true;
                     } else if (args[i].Equals("-w") || args[i].Equals("--switch")) {
                         ifSwitch = true;
                     } else if (args[i].Equals("-c") || args[i].Equals("--costs")) {
-                        setCosts(args[i + 1], args[i + 2], args[i + 3]);
-                        i = i + 3;
+                        SetCosts(args[i + 1], args[i + 2], args[i + 3]);
+                        i += 3;
                     } else if (args[i].Equals("-v") || args[i].Equals("--verbose")) {
                         verbose = true;
                     } else if (args[i].Equals("-m") || args[i].Equals("--mapping")) {
@@ -274,28 +274,28 @@ namespace Barbar.TreeDistance.Util
             if (strategy) {
                 if (sota) {
                     if (demaine) {
-                        setStrategy(sotaStrategy, true);
+                        SetStrategy(sotaStrategy, true);
                     } else {
-                        setStrategy(sotaStrategy, false);
+                        SetStrategy(sotaStrategy, false);
                     }
-                    ted = rted.nonNormalizedTreeDist();
+                    ted = rted.NonNormalizedTreeDist();
                 } else if (custom) {
-                    setStrategy(customStrategy, ifSwitch);
-                    ted = rted.nonNormalizedTreeDist();
+                    SetStrategy(customStrategy, ifSwitch);
+                    ted = rted.NonNormalizedTreeDist();
                 } else if (array) {
-                    setStrategy(customStrategyArrayFile);
-                    ted = rted.nonNormalizedTreeDist();
+                    SetStrategy(customStrategyArrayFile);
+                    ted = rted.NonNormalizedTreeDist();
                 }
             } else {
-                rted.computeOptimalStrategy();
-                ted = rted.nonNormalizedTreeDist();
+                rted.ComputeOptimalStrategy();
+                ted = rted.NonNormalizedTreeDist();
             }
             watch.Stop();
             if (verbose) {
                 Console.Out.WriteLine("distance:             " + ted);
                 Console.Out.WriteLine("runtime:              " + watch.ElapsedMilliseconds / 1000.0);
                 Console.Out.WriteLine("relevant subproblems: " + rted.counter);
-                Console.Out.WriteLine("recurence steps:      " + rted.strStat[3]);
+                Console.Out.WriteLine("recurrence steps:      " + rted.strStat[3]);
                 Console.Out.WriteLine("left paths:           " + rted.strStat[0]);
                 Console.Out.WriteLine("right paths:          " + rted.strStat[1]);
                 Console.Out.WriteLine("heavy paths:          " + rted.strStat[2]);
@@ -316,11 +316,11 @@ namespace Barbar.TreeDistance.Util
          * @param ts1
          * @param ts2
          */
-        private void parseTreesFromCommandLine(string ts1, string ts2) {
+        private void ParseTreesFromCommandLine(string ts1, string ts2) {
             try
             {
-                lt1 = LblTree.fromString(ts1);
-                size1 = lt1.getNodeCount();
+                lt1 = LblTree.FromString(ts1);
+                size1 = lt1.GetNodeCount();
             } catch (Exception)
             {
                 Console.Out.WriteLine("TREE1 argument has wrong format");
@@ -329,14 +329,14 @@ namespace Barbar.TreeDistance.Util
 
             try
             {
-                lt2 = LblTree.fromString(ts2);
-                size2 = lt2.getNodeCount();
+                lt2 = LblTree.FromString(ts2);
+                size2 = lt2.GetNodeCount();
             } catch (Exception)
             {
                 Console.Out.WriteLine("TREE2 argument has wrong format");
                 Environment.Exit(0);
             }
-            rted.init(lt1, lt2);
+            rted.Init(lt1, lt2);
         }
 
         /**
@@ -345,11 +345,11 @@ namespace Barbar.TreeDistance.Util
          * @param fs1
          * @param fs2
          */
-        private void parseTreesFromFiles(string fs1, string fs2) {
+        private void ParseTreesFromFiles(string fs1, string fs2) {
             try
             {
-                lt1 = LblTree.fromString(new StreamReader(File.OpenRead(fs1)).ReadLine());
-                size1 = lt1.getNodeCount();
+                lt1 = LblTree.FromString(new StreamReader(File.OpenRead(fs1)).ReadLine());
+                size1 = lt1.GetNodeCount();
             } catch (Exception)
             {
                 Console.Out.WriteLine("TREE1 argument has wrong format");
@@ -358,14 +358,14 @@ namespace Barbar.TreeDistance.Util
 
             try
             {
-                lt2 = LblTree.fromString(new StreamReader(File.OpenRead(fs2)).ReadLine());
-                size2 = lt2.getNodeCount();
+                lt2 = LblTree.FromString(new StreamReader(File.OpenRead(fs2)).ReadLine());
+                size2 = lt2.GetNodeCount();
             } catch (Exception)
             {
                 Console.Out.WriteLine("TREE2 argument has wrong format");
                 Environment.Exit(0);
             }
-            rted.init(lt1, lt2);
+            rted.Init(lt1, lt2);
         }
 
         /**
@@ -375,10 +375,10 @@ namespace Barbar.TreeDistance.Util
          * @param cis
          * @param cms
          */
-        private void setCosts(string cds, string cis, string cms) {
+        private void SetCosts(string cds, string cis, string cms) {
             try
             {
-                rted.setCustomCosts(double.Parse(cds), double.Parse(cis), double.Parse(cms));
+                rted.SetCustomCosts(double.Parse(cds), double.Parse(cis), double.Parse(cms));
             } catch (Exception)
             {
                 Console.Out.WriteLine("One of the costs has wrong format.");
@@ -392,13 +392,13 @@ namespace Barbar.TreeDistance.Util
          * @param str strategy type
          * @param ifSwitch if set to true the strategy will be applied to the currently bigger tree 
          */
-        private void setStrategy(string str, bool ifSwitch) {
+        private void SetStrategy(string str, bool ifSwitch) {
             if (str.Equals("left")) {
-                rted.setCustomStrategy(0, ifSwitch);
+                rted.SetCustomStrategy(0, ifSwitch);
             } else if (str.Equals("right")) {
-                rted.setCustomStrategy(1, ifSwitch);
+                rted.SetCustomStrategy(1, ifSwitch);
             } else if (str.Equals("heavy")) {
-                rted.setCustomStrategy(2, ifSwitch);
+                rted.SetCustomStrategy(2, ifSwitch);
             } else {
                 Console.Out.WriteLine("Wrong strategy.");
                 Environment.Exit(0);
@@ -411,10 +411,10 @@ namespace Barbar.TreeDistance.Util
          * @param str strategy type
          * @param ifSwitch if set to true the strategy will be applied to the currently bigger tree 
          */
-        private void setStrategy(int str, bool ifSwitch) {
+        private void SetStrategy(int str, bool ifSwitch) {
             try
             {
-                rted.setCustomStrategy(str, ifSwitch);
+                rted.SetCustomStrategy(str, ifSwitch);
             } catch (Exception)
             {
                 Console.Out.WriteLine("Strategy has wrong format.");
@@ -427,10 +427,10 @@ namespace Barbar.TreeDistance.Util
          * 
          * @param strArrayFile path to the file with the strategy
          */
-        private void setStrategy(string strArrayFile) {
+        private void SetStrategy(string strArrayFile) {
             try
             {
-                rted.setCustomStrategy(parseStrategyArrayString(strArrayFile));
+                rted.SetCustomStrategy(ParseStrategyArrayString(strArrayFile));
             } catch (Exception)
             {
                 Console.Out.WriteLine("Strategy has wrong format.");
@@ -449,7 +449,7 @@ namespace Barbar.TreeDistance.Util
          * @param strategyArray
          * @return
          */
-        private int[][] parseStrategyArrayString(string fileWithStrategyArray) {
+        private int[][] ParseStrategyArrayString(string fileWithStrategyArray) {
             int[][] str = null;
             var strVector = new List<int[]>();
             int[] strLine;
@@ -469,8 +469,8 @@ namespace Barbar.TreeDistance.Util
                         Environment.Exit(0);
                     }
                     int i = 0;
-                    while (s.hasNextInt()) {
-                        value = s.nextInt();
+                    while (s.HasNextInt()) {
+                        value = s.NextInt();
                         if (value != 0 && value != 1 && value != 2 && value != 4 && value != 5 && value != 6) {
                             Console.Out.WriteLine("Strategy value at position " + index + " in the strategy array file is wrong.");
                             Environment.Exit(0);

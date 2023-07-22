@@ -116,23 +116,23 @@ namespace Barbar.TreeDistance.Distance
          * @param t2
          * @return tree edit distance between trees t1 and t2
          */
-        public double nonNormalizedTreeDist(LblTree t1, LblTree t2) {
-            init(t1, t2);
+        public double NonNormalizedTreeDist(LblTree t1, LblTree t2) {
+            Init(t1, t2);
             STR = Arrays.Allocate<int>(size1, size2);
-            computeOptimalStrategy();
-            initDelta();
-            return computeDistUsingStrArray(it1, it2);
+            ComputeOptimalStrategy();
+            InitDelta();
+            return ComputeDistUsingStrArray(it1, it2);
         }
 
-        public double nonNormalizedTreeDist() {
+        public double NonNormalizedTreeDist() {
             if (it1 == null || it2 == null) {
                 Console.Error.WriteLine("No stored trees to compare.");
             }
             if (STR == null) {
                 Console.Error.WriteLine("No strategy to use.");
             }
-            initDelta();
-            return computeDistUsingStrArray(it1, it2);
+            InitDelta();
+            return ComputeDistUsingStrArray(it1, it2);
         }
 
         /**
@@ -141,12 +141,12 @@ namespace Barbar.TreeDistance.Distance
          * @param t1
          * @param t2
          */
-        public void init(LblTree t1, LblTree t2) {
+        public void Init(LblTree t1, LblTree t2) {
             ld = new LabelDictionary();
             it1 = new InfoTree(t1, ld);
             it2 = new InfoTree(t2, ld);
-            size1 = it1.getSize();
-            size2 = it2.getSize();
+            size1 = it1.GetSize();
+            size2 = it2.GetSize();
             IJ = Arrays.Allocate<int>(Math.Max(size1, size2), Math.Max(size1, size2));
             delta = Arrays.Allocate<double>(size1, size2);
             deltaBit = Arrays.Allocate<byte>(size1, size2);
@@ -154,17 +154,17 @@ namespace Barbar.TreeDistance.Distance
             costW = Arrays.Allocate<long>(3, size2);
         }
 
-        private void initDelta() {
+        private void InitDelta() {
             // must be split from init because init was called before setting custom costs
 
             // Calculate delta between every leaf in G (empty tree) and all the
             // nodes in F.
             // Calculate it both sides: leafs of F and nodes of G & leafs of G and
             // nodes of F.
-            int[] labels1 = it1.getInfoArray(POST2_LABEL);
-            int[] labels2 = it2.getInfoArray(POST2_LABEL);
-            int[] sizes1 = it1.getInfoArray(POST2_SIZE);
-            int[] sizes2 = it2.getInfoArray(POST2_SIZE);
+            int[] labels1 = it1.GetInfoArray(POST2_LABEL);
+            int[] labels2 = it2.GetInfoArray(POST2_LABEL);
+            int[] sizes1 = it1.GetInfoArray(POST2_SIZE);
+            int[] sizes2 = it2.GetInfoArray(POST2_SIZE);
             for (int x = 0; x < sizes1.Length; x++) { // for all nodes of initially
                                                       // left tree
                 for (int y = 0; y < sizes2.Length; y++) { // for all nodes of
@@ -197,7 +197,7 @@ namespace Barbar.TreeDistance.Distance
         /**
          * A method for computing and storing the optimal strategy
          */
-        public void computeOptimalStrategy() {
+        public void ComputeOptimalStrategy() {
             long heavyMin, revHeavyMin, leftMin, revLeftMin, rightMin, revRightMin;
             long min = -1;
             int strategy = -1;
@@ -305,10 +305,10 @@ namespace Barbar.TreeDistance.Distance
          * @param it2
          * @return
          */
-        private double computeDistUsingStrArray(InfoTree it1, InfoTree it2) {
+        private double ComputeDistUsingStrArray(InfoTree it1, InfoTree it2) {
 
-            int postorder1 = it1.getCurrentNode();
-            int postorder2 = it2.getCurrentNode();
+            int postorder1 = it1.GetCurrentNode();
+            int postorder2 = it2.GetCurrentNode();
 
             int stepStrategy = STR[postorder1][postorder2];
 
@@ -320,129 +320,129 @@ namespace Barbar.TreeDistance.Distance
             switch (stepStrategy) {
                 case LEFT:
                     tmpPostorder = postorder1;
-                    stepPath = it1.getPath(LEFT);
+                    stepPath = it1.GetPath(LEFT);
                     // go along the path
                     while (stepPath[postorder1] > -1) {
-                        stepRelSubtrees = it1.getNodeRelSubtrees(LEFT, postorder1);
+                        stepRelSubtrees = it1.GetNodeRelSubtrees(LEFT, postorder1);
                         if (stepRelSubtrees != null) {
                             // iterate over rel subtrees for a specific node on the path
                             foreach(var rs in stepRelSubtrees) {
-                                it1.setCurrentNode(rs);
+                                it1.SetCurrentNode(rs);
                                 // make the recursion
-                                computeDistUsingStrArray(it1, it2);
+                                ComputeDistUsingStrArray(it1, it2);
                             }
                         }
                         postorder1 = stepPath[postorder1];
                     }
                     // set current node
-                    it1.setCurrentNode(tmpPostorder);
-                    it1.setSwitched(false);
-                    it2.setSwitched(false);
+                    it1.SetCurrentNode(tmpPostorder);
+                    it1.SetSwitched(false);
+                    it2.SetSwitched(false);
                     // count the distance using a single-path function
                     strStat[3]++;
                     strStat[LEFT]++;
-                    return spfL(it1, it2);
+                    return SpfL(it1, it2);
                 case RIGHT:
                     tmpPostorder = postorder1;
-                    stepPath = it1.getPath(RIGHT);
+                    stepPath = it1.GetPath(RIGHT);
                     while (stepPath[postorder1] > -1) {
-                        stepRelSubtrees = it1.getNodeRelSubtrees(RIGHT, postorder1);
+                        stepRelSubtrees = it1.GetNodeRelSubtrees(RIGHT, postorder1);
                         if (stepRelSubtrees != null) {
                             foreach (var rs in stepRelSubtrees) {
-                                it1.setCurrentNode(rs);
-                                computeDistUsingStrArray(it1, it2);
+                                it1.SetCurrentNode(rs);
+                                ComputeDistUsingStrArray(it1, it2);
                             }
                         }
                         postorder1 = stepPath[postorder1];
                     }
-                    it1.setCurrentNode(tmpPostorder);
-                    it1.setSwitched(false);
-                    it2.setSwitched(false);
+                    it1.SetCurrentNode(tmpPostorder);
+                    it1.SetSwitched(false);
+                    it2.SetSwitched(false);
                     strStat[3]++;
                     strStat[RIGHT]++;
-                    return spfR(it1, it2);
+                    return SpfR(it1, it2);
                 case HEAVY:
                     tmpPostorder = postorder1;
-                    stepPath = it1.getPath(HEAVY);
+                    stepPath = it1.GetPath(HEAVY);
                     heavyPath = new List<int>();
                     heavyPath.Add(postorder1);
                     while (stepPath[postorder1] > -1) {
-                        stepRelSubtrees = it1.getNodeRelSubtrees(HEAVY, postorder1);
+                        stepRelSubtrees = it1.GetNodeRelSubtrees(HEAVY, postorder1);
                         if (stepRelSubtrees != null) {
                             foreach (var rs in stepRelSubtrees) {
-                                it1.setCurrentNode(rs);
-                                computeDistUsingStrArray(it1, it2);
+                                it1.SetCurrentNode(rs);
+                                ComputeDistUsingStrArray(it1, it2);
                             }
                         }
                         postorder1 = stepPath[postorder1];
                         heavyPath.Add(postorder1);
                     }
-                    it1.setCurrentNode(tmpPostorder);
-                    it1.setSwitched(false);
-                    it2.setSwitched(false);
+                    it1.SetCurrentNode(tmpPostorder);
+                    it1.SetSwitched(false);
+                    it2.SetSwitched(false);
                     strStat[3]++;
                     strStat[HEAVY]++;
-                    return spfH(it1, it2, heavyPath.ToArray());
+                    return SpfH(it1, it2, heavyPath.ToArray());
                 case REVLEFT:
                     tmpPostorder = postorder2;
-                    stepPath = it2.getPath(LEFT);
+                    stepPath = it2.GetPath(LEFT);
                     while (stepPath[postorder2] > -1) {
-                        stepRelSubtrees = it2.getNodeRelSubtrees(LEFT, postorder2);
+                        stepRelSubtrees = it2.GetNodeRelSubtrees(LEFT, postorder2);
                         if (stepRelSubtrees != null) {
                             foreach (var rs in stepRelSubtrees) {
-                                it2.setCurrentNode(rs);
-                                computeDistUsingStrArray(it1, it2);
+                                it2.SetCurrentNode(rs);
+                                ComputeDistUsingStrArray(it1, it2);
                             }
                         }
                         postorder2 = stepPath[postorder2];
                     }
-                    it2.setCurrentNode(tmpPostorder);
-                    it1.setSwitched(true);
-                    it2.setSwitched(true);
+                    it2.SetCurrentNode(tmpPostorder);
+                    it1.SetSwitched(true);
+                    it2.SetSwitched(true);
                     strStat[3]++;
                     strStat[LEFT]++;
-                    return spfL(it2, it1);
+                    return SpfL(it2, it1);
                 case REVRIGHT:
                     tmpPostorder = postorder2;
-                    stepPath = it2.getPath(RIGHT);
+                    stepPath = it2.GetPath(RIGHT);
                     while (stepPath[postorder2] > -1) {
-                        stepRelSubtrees = it2.getNodeRelSubtrees(RIGHT, postorder2);
+                        stepRelSubtrees = it2.GetNodeRelSubtrees(RIGHT, postorder2);
                         if (stepRelSubtrees != null) {
                             foreach (var rs in stepRelSubtrees) {
-                                it2.setCurrentNode(rs);
-                                computeDistUsingStrArray(it1, it2);
+                                it2.SetCurrentNode(rs);
+                                ComputeDistUsingStrArray(it1, it2);
                             }
                         }
                         postorder2 = stepPath[postorder2];
                     }
-                    it2.setCurrentNode(tmpPostorder);
-                    it1.setSwitched(true);
-                    it2.setSwitched(true);
+                    it2.SetCurrentNode(tmpPostorder);
+                    it1.SetSwitched(true);
+                    it2.SetSwitched(true);
                     strStat[3]++;
                     strStat[RIGHT]++;
-                    return spfR(it2, it1);
+                    return SpfR(it2, it1);
                 case REVHEAVY:
                     tmpPostorder = postorder2;
-                    stepPath = it2.getPath(HEAVY);
+                    stepPath = it2.GetPath(HEAVY);
                     heavyPath = new List<int>();
                     heavyPath.Add(postorder2);
                     while (stepPath[postorder2] > -1) {
-                        stepRelSubtrees = it2.getNodeRelSubtrees(HEAVY, postorder2);
+                        stepRelSubtrees = it2.GetNodeRelSubtrees(HEAVY, postorder2);
                         if (stepRelSubtrees != null) {
                             foreach (var rs in stepRelSubtrees) {
-                                it2.setCurrentNode(rs);
-                                computeDistUsingStrArray(it1, it2);
+                                it2.SetCurrentNode(rs);
+                                ComputeDistUsingStrArray(it1, it2);
                             }
                         }
                         postorder2 = stepPath[postorder2];
                         heavyPath.Add(postorder2);
                     }
-                    it2.setCurrentNode(tmpPostorder);
-                    it1.setSwitched(true);
-                    it2.setSwitched(true);
+                    it2.SetCurrentNode(tmpPostorder);
+                    it1.SetSwitched(true);
+                    it2.SetSwitched(true);
                     strStat[3]++;
                     strStat[HEAVY]++;
-                    return spfH(it2, it1, heavyPath.ToArray());
+                    return SpfH(it2, it1, heavyPath.ToArray());
                 default:
                     return -1;
             }
@@ -456,33 +456,33 @@ namespace Barbar.TreeDistance.Distance
          * @param it2
          * @return distance between subtrees it1 and it2
          */
-        private double spfL(InfoTree it1, InfoTree it2) {
+        private double SpfL(InfoTree it1, InfoTree it2) {
 
-            int fPostorder = it1.getCurrentNode();
-            int gPostorder = it2.getCurrentNode();
+            int fPostorder = it1.GetCurrentNode();
+            int gPostorder = it2.GetCurrentNode();
 
             int minKR = it2.info[POST2_MIN_KR][gPostorder];
             int[] kr = it2.info[KR];
             if (minKR > -1) {
                 for (int j = minKR; kr[j] < gPostorder; j++) {
-                    treeEditDist(it1, it2, fPostorder, kr[j]);
+                    TreeEditDist(it1, it2, fPostorder, kr[j]);
                 }
             }
-            treeEditDist(it1, it2, fPostorder, gPostorder);
+            TreeEditDist(it1, it2, fPostorder, gPostorder);
 
-            return it1.isSwitched() ? delta[gPostorder][fPostorder]
+            return it1.IsSwitched() ? delta[gPostorder][fPostorder]
                 + deltaBit[gPostorder][fPostorder] * costMatch
                 : delta[fPostorder][gPostorder]
                     + deltaBit[fPostorder][gPostorder] * costMatch;
         }
 
-        private void treeEditDist(InfoTree it1, InfoTree it2, int i, int j) {
+        private void TreeEditDist(InfoTree it1, InfoTree it2, int i, int j) {
             int m = i - it1.info[POST2_LLD][i] + 2;
             int n = j - it2.info[POST2_LLD][j] + 2;
             double[][] forestdist = Arrays.Allocate<double>(m, n);
             int ioff = it1.info[POST2_LLD][i] - 1;
             int joff = it2.info[POST2_LLD][j] - 1;
-            bool switched = it1.isSwitched();
+            bool switched = it1.IsSwitched();
             forestdist[0][0] = 0;
             for (int i1 = 1; i1 <= i - ioff; i1++) {
                 forestdist[i1][0] = forestdist[i1 - 1][0] + costDel;
@@ -506,9 +506,9 @@ namespace Barbar.TreeDistance.Distance
                         forestdist[i1][j1] = (da < db) ? ((da < dc) ? da : dc)
                             : ((db < dc) ? db : dc);
 
-                        setDeltaValue(i1 + ioff, j1 + joff,
+                        SetDeltaValue(i1 + ioff, j1 + joff,
                             forestdist[i1 - 1][j1 - 1], switched);
-                        setDeltaBitValue(i1 + ioff, j1 + joff,
+                        SetDeltaBitValue(i1 + ioff, j1 + joff,
                             (byte)((forestdist[i1][j1]
                                 - forestdist[i1 - 1][j1 - 1] > 0) ? 1 : 0),
                             switched);
@@ -539,37 +539,37 @@ namespace Barbar.TreeDistance.Distance
          * @param it2
          * @return distance between subtrees it1 and it2
          */
-        private double spfR(InfoTree it1, InfoTree it2) {
+        private double SpfR(InfoTree it1, InfoTree it2) {
 
-            int fReversedPostorder = it1.getSize() - 1
-                - it1.info[POST2_PRE][it1.getCurrentNode()];
-            int gReversedPostorder = it2.getSize() - 1
-                - it2.info[POST2_PRE][it2.getCurrentNode()];
+            int fReversedPostorder = it1.GetSize() - 1
+                - it1.info[POST2_PRE][it1.GetCurrentNode()];
+            int gReversedPostorder = it2.GetSize() - 1
+                - it2.info[POST2_PRE][it2.GetCurrentNode()];
 
             int minRKR = it2.info[RPOST2_MIN_RKR][gReversedPostorder];
             int[] rkr = it2.info[RKR];
             if (minRKR > -1) {
                 for (int j = minRKR; rkr[j] < gReversedPostorder; j++) {
-                    treeEditDistRev(it1, it2, fReversedPostorder, rkr[j]);
+                    TreeEditDistRev(it1, it2, fReversedPostorder, rkr[j]);
                 }
             }
-            treeEditDistRev(it1, it2, fReversedPostorder, gReversedPostorder);
+            TreeEditDistRev(it1, it2, fReversedPostorder, gReversedPostorder);
 
-            return it1.isSwitched() ? delta[it2.getCurrentNode()][it1
-                .getCurrentNode()]
-                + deltaBit[it2.getCurrentNode()][it1.getCurrentNode()]
-                * costMatch : delta[it1.getCurrentNode()][it2.getCurrentNode()]
-                + deltaBit[it1.getCurrentNode()][it2.getCurrentNode()]
+            return it1.IsSwitched() ? delta[it2.GetCurrentNode()][it1
+                .GetCurrentNode()]
+                + deltaBit[it2.GetCurrentNode()][it1.GetCurrentNode()]
+                * costMatch : delta[it1.GetCurrentNode()][it2.GetCurrentNode()]
+                + deltaBit[it1.GetCurrentNode()][it2.GetCurrentNode()]
                 * costMatch;
         }
 
-        private void treeEditDistRev(InfoTree it1, InfoTree it2, int i, int j) {
+        private void TreeEditDistRev(InfoTree it1, InfoTree it2, int i, int j) {
             int m = i - it1.info[RPOST2_RLD][i] + 2;
             int n = j - it2.info[RPOST2_RLD][j] + 2;
             double[][] forestdist = Arrays.Allocate<double>(m, n);
             int ioff = it1.info[RPOST2_RLD][i] - 1;
             int joff = it2.info[RPOST2_RLD][j] - 1;
-            bool switched = it1.isSwitched();
+            bool switched = it1.IsSwitched();
             forestdist[0][0] = 0;
             for (int i1 = 1; i1 <= i - ioff; i1++) {
                 forestdist[i1][0] = forestdist[i1 - 1][0] + costDel;
@@ -593,10 +593,10 @@ namespace Barbar.TreeDistance.Distance
                         forestdist[i1][j1] = (da < db) ? ((da < dc) ? da : dc)
                             : ((db < dc) ? db : dc);
 
-                        setDeltaValue(it1.info[RPOST2_POST][i1 + ioff],
+                        SetDeltaValue(it1.info[RPOST2_POST][i1 + ioff],
                             it2.info[RPOST2_POST][j1 + joff],
                             forestdist[i1 - 1][j1 - 1], switched);
-                        setDeltaBitValue(it1.info[RPOST2_POST][i1 + ioff],
+                        SetDeltaBitValue(it1.info[RPOST2_POST][i1 + ioff],
                             it2.info[RPOST2_POST][j1 + joff],
                             (byte)((forestdist[i1][j1]
                                 - forestdist[i1 - 1][j1 - 1] > 0) ? 1 : 0),
@@ -635,15 +635,15 @@ namespace Barbar.TreeDistance.Distance
          * @param heavyPath
          * @return distance between subtrees it1 and it2
          */
-        private double spfH(InfoTree it1, InfoTree it2, int[] heavyPath) {
+        private double SpfH(InfoTree it1, InfoTree it2, int[] heavyPath) {
 
-            int fSize = it1.info[POST2_SIZE][it1.getCurrentNode()];
-            int gSize = it2.info[POST2_SIZE][it2.getCurrentNode()];
+            int fSize = it1.info[POST2_SIZE][it1.GetCurrentNode()];
+            int gSize = it2.info[POST2_SIZE][it2.GetCurrentNode()];
 
-            int gRevPre = it2.getSize() - 1 - it2.getCurrentNode();
-            int gPre = it2.info[POST2_PRE][it2.getCurrentNode()];
+            int gRevPre = it2.GetSize() - 1 - it2.GetCurrentNode();
+            int gPre = it2.info[POST2_PRE][it2.GetCurrentNode()];
 
-            int gTreeSize = it2.getSize();
+            int gTreeSize = it2.GetSize();
 
             int strategy;
 
@@ -665,7 +665,7 @@ namespace Barbar.TreeDistance.Distance
                 if (strategy != BOTH) {
                     if (it1.info[POST2_SIZE][vp] == 1) {
                         for (int i = gSize - 1; i >= 0; i--) {
-                            jOfi = jOfI(it2, i, gSize, gRevPre, gPre, strategy,
+                            jOfi = JOfI(it2, i, gSize, gRevPre, gPre, strategy,
                                 gTreeSize);
                             for (int j = jOfi; j >= 0; j--) {
                                 t[i][j] = (gSize - (i + j)) * costIns;
@@ -673,11 +673,11 @@ namespace Barbar.TreeDistance.Distance
                         }
                         previousStrategy = strategy;
                     }
-                    computePeriod(it1, vp, nextVp, it2, strategy);
+                    ComputePeriod(it1, vp, nextVp, it2, strategy);
                 } else {
                     if (it1.info[POST2_SIZE][vp] == 1) {
                         for (int i = gSize - 1; i >= 0; i--) {
-                            jOfi = jOfI(it2, i, gSize, gRevPre, gPre, LEFT,
+                            jOfi = JOfI(it2, i, gSize, gRevPre, gPre, LEFT,
                                 gTreeSize);
                             for (int j = jOfi; j >= 0; j--) {
                                 t[i][j] = (gSize - (i + j)) * costIns;
@@ -685,10 +685,10 @@ namespace Barbar.TreeDistance.Distance
                         }
                         previousStrategy = LEFT;
                     }
-                    computePeriod(it1, vp, nextVp, it2, LEFT);
+                    ComputePeriod(it1, vp, nextVp, it2, LEFT);
                     if (it1.info[POST2_SIZE][vp] == 1) {
                         for (int i = gSize - 1; i >= 0; i--) {
-                            jOfi = jOfI(it2, i, gSize, gRevPre, gPre, RIGHT,
+                            jOfi = JOfI(it2, i, gSize, gRevPre, gPre, RIGHT,
                                 gTreeSize);
                             for (int j = jOfi; j >= 0; j--) {
                                 t[i][j] = (gSize - (i + j)) * costIns;
@@ -696,7 +696,7 @@ namespace Barbar.TreeDistance.Distance
                         }
                         previousStrategy = RIGHT;
                     }
-                    computePeriod(it1, vp, nextVp, it2, RIGHT);
+                    ComputePeriod(it1, vp, nextVp, it2, RIGHT);
                 }
                 nextVp = vp;
             }
@@ -712,19 +712,19 @@ namespace Barbar.TreeDistance.Distance
          * @param it2
          * @param aStrategy
          */
-        private void computePeriod(InfoTree it1, int aVp, int aNextVp,
+        private void ComputePeriod(InfoTree it1, int aVp, int aNextVp,
             InfoTree it2, int aStrategy) {
 
-            int fTreeSize = it1.getSize();
-            int gTreeSize = it2.getSize();
+            int fTreeSize = it1.GetSize();
+            int gTreeSize = it2.GetSize();
 
             int vpPreorder = it1.info[POST2_PRE][aVp];
             int vpRevPreorder = fTreeSize - 1 - aVp;
             int vpSize = it1.info[POST2_SIZE][aVp];
 
-            int gSize = it2.info[POST2_SIZE][it2.getCurrentNode()];
-            int gPreorder = it2.info[POST2_PRE][it2.getCurrentNode()];
-            int gRevPreorder = gTreeSize - 1 - it2.getCurrentNode();
+            int gSize = it2.info[POST2_SIZE][it2.GetCurrentNode()];
+            int gPreorder = it2.info[POST2_PRE][it2.GetCurrentNode()];
+            int gRevPreorder = gTreeSize - 1 - it2.GetCurrentNode();
 
             int nextVpPreorder = -1;
             int nextVpRevPreorder = -1;
@@ -741,18 +741,18 @@ namespace Barbar.TreeDistance.Distance
                 k = aStrategy == LEFT ? nextVpPreorder - vpPreorder
                     : nextVpRevPreorder - vpRevPreorder;
                 if (aStrategy != previousStrategy) {
-                    computeIJTable(it2, gPreorder, gRevPreorder, gSize, aStrategy,
+                    ComputeIJTable(it2, gPreorder, gRevPreorder, gSize, aStrategy,
                         gTreeSize);
                 }
             } else {
                 k = 1;
-                computeIJTable(it2, gPreorder, gRevPreorder, gSize, aStrategy,
+                ComputeIJTable(it2, gPreorder, gRevPreorder, gSize, aStrategy,
                     gTreeSize);
             }
 
             int realStrategy = it1.info[POST2_STRATEGY][aVp];
 
-            bool switched = it1.isSwitched();
+            bool switched = it1.IsSwitched();
 
             tTMP = tCOPY;
             tCOPY = t;
@@ -766,10 +766,10 @@ namespace Barbar.TreeDistance.Distance
                 // update delta from T table => dist between Fvp-1 and G was
                 // computed in previous compute period
                 if (gSize == 1) {
-                    setDeltaValue(it1.info[PRE2_POST][vpPreorder],
+                    SetDeltaValue(it1.info[PRE2_POST][vpPreorder],
                         it2.info[PRE2_POST][gPreorder], (vpSize - 1) * costDel, switched);
                 } else {
-                    setDeltaValue(it1.info[PRE2_POST][vpPreorder],
+                    SetDeltaValue(it1.info[PRE2_POST][vpPreorder],
                         it2.info[PRE2_POST][gPreorder], t[1][0], switched);
                 }
             }
@@ -792,7 +792,7 @@ namespace Barbar.TreeDistance.Distance
             for (int i = gSize - 1; i >= 0; i--) {
 
                 // jOfI was already computed once in spfH
-                jOfI = this.jOfI(it2, i, gSize, gRevPreorder, gPreorder, aStrategy,
+                jOfI = this.JOfI(it2, i, gSize, gRevPreorder, gPreorder, aStrategy,
                     gTreeSize);
 
                 // when strategy==BOTH first LEFT then RIGHT is done
@@ -944,7 +944,7 @@ namespace Barbar.TreeDistance.Distance
 
                 if (i > 0) {
                     // compute table Q
-                    jOfIminus1 = this.jOfI(it2, i - 1, gSize, gRevPreorder, gPreorder,
+                    jOfIminus1 = this.JOfI(it2, i - 1, gSize, gRevPreorder, gPreorder,
                         aStrategy, gTreeSize);
                     if (jOfIminus1 <= jOfI) {
                         for (int x = 0; x < k; x++) { // copy whole column |
@@ -968,18 +968,18 @@ namespace Barbar.TreeDistance.Distance
                                 previousI = aStrategy == LEFT ? IJ[i][jOfIminus1]
                                     - gPreorder : IJ[i][jOfIminus1]
                                     - gRevPreorder;
-                                setDeltaValue(
+                                SetDeltaValue(
                                     it1.info[PRE2_POST][vpPreorder],
                                     it2.info[PRE2_POST][gijOfIMinus1Preorder],
                                     tCOPY[previousI][i + jOfIminus1 - previousI],
                                     switched);
                             } else {
-                                setDeltaValue(it1.info[PRE2_POST][vpPreorder],
+                                SetDeltaValue(it1.info[PRE2_POST][vpPreorder],
                                     it2.info[PRE2_POST][gijOfIMinus1Preorder],
                                     tCOPY[i][jOfIminus1], switched);
                             }
                         } else {
-                            setDeltaValue(it1.info[PRE2_POST][vpPreorder],
+                            SetDeltaValue(it1.info[PRE2_POST][vpPreorder],
                                 it2.info[PRE2_POST][gijOfIMinus1Preorder],
                                 s[k - 1 - 1][jOfIminus1], switched);
                         }
@@ -1001,7 +1001,7 @@ namespace Barbar.TreeDistance.Distance
          * @param aStrategy
          * @param treeSize
          */
-        private void computeIJTable(InfoTree it, int subtreePreorder,
+        private void ComputeIJTable(InfoTree it, int subtreePreorder,
             int subtreeRevPreorder, int subtreeSize, int aStrategy, int treeSize) {
 
             int change;
@@ -1054,7 +1054,7 @@ namespace Barbar.TreeDistance.Distance
          * @param treeSize
          * @return j for given i
          */
-        private int jOfI(InfoTree it, int aI, int aSubtreeWeight,
+        private int JOfI(InfoTree it, int aI, int aSubtreeWeight,
             int aSubtreeRevPre, int aSubtreePre, int aStrategy, int treeSize) {
             return aStrategy == LEFT ? aSubtreeWeight - aI
                 - it.info[POST2_SIZE][treeSize - 1 - (aSubtreeRevPre + aI)]
@@ -1064,7 +1064,7 @@ namespace Barbar.TreeDistance.Distance
                         - (aSubtreePre + aI)]];
         }
 
-        private void setDeltaValue(int a, int b, double value, bool switched) {
+        private void SetDeltaValue(int a, int b, double value, bool switched) {
             if (switched) {
                 delta[b][a] = value;
             } else {
@@ -1072,7 +1072,7 @@ namespace Barbar.TreeDistance.Distance
             }
         }
 
-        private void setDeltaBitValue(int a, int b, byte value, bool switched) {
+        private void SetDeltaBitValue(int a, int b, byte value, bool switched) {
             if (switched) {
                 deltaBit[b][a] = value;
             } else {
@@ -1080,17 +1080,17 @@ namespace Barbar.TreeDistance.Distance
             }
         }
 
-        public void setCustomCosts(double costDel, double costIns, double costMatch) {
+        public void SetCustomCosts(double costDel, double costIns, double costMatch) {
             this.costDel = costDel;
             this.costIns = costIns;
             this.costMatch = costMatch;
         }
 
-        public void setCustomStrategy(int[][] strategyArray) {
+        public void SetCustomStrategy(int[][] strategyArray) {
             STR = strategyArray;
         }
 
-        public void setCustomStrategy(int strategy, bool ifSwitch) {
+        public void SetCustomStrategy(int strategy, bool ifSwitch) {
             STR = Arrays.Allocate<int>(size1, size2);
             if (ifSwitch) {
                 for (int i = 0; i < size1; i++) {
@@ -1141,7 +1141,7 @@ namespace Barbar.TreeDistance.Distance
             }
 
             // forestdist for input trees has to be computed
-            forestDist(it1, it2, size1, size2, treedist, forestdist);
+            ForestDist(it1, it2, size1, size2, treedist, forestdist);
 
             // empty edit mapping
             var editMapping = new Stack<int[]>();
@@ -1160,13 +1160,13 @@ namespace Barbar.TreeDistance.Distance
 
                 // compute forest distance matrix
                 if (!rootNodePair) {
-                    forestDist(it1, it2, lastRow, lastCol, treedist, forestdist);
+                    ForestDist(it1, it2, lastRow, lastCol, treedist, forestdist);
                 }
                 rootNodePair = false;
 
                 // compute mapping for current forest distance matrix
-                int firstRow = it1.getInfo(POST2_LLD, lastRow - 1) + 1 - 1;
-                int firstCol = it2.getInfo(POST2_LLD, lastCol - 1) + 1 - 1;
+                int firstRow = it1.GetInfo(POST2_LLD, lastRow - 1) + 1 - 1;
+                int firstCol = it2.GetInfo(POST2_LLD, lastCol - 1) + 1 - 1;
                 int row = lastRow;
                 int col = lastCol;
                 while ((row > firstRow) || (col > firstCol)) {
@@ -1184,8 +1184,8 @@ namespace Barbar.TreeDistance.Distance
                         // node with postorderID row in ted1 is renamed to node col
                         // in ted2
 
-                        if ((it1.getInfo(POST2_LLD, row - 1) == it1.getInfo(POST2_LLD, lastRow - 1))
-                            && (it2.getInfo(POST2_LLD, col - 1) == it2.getInfo(POST2_LLD, lastCol - 1))) {
+                        if ((it1.GetInfo(POST2_LLD, row - 1) == it1.GetInfo(POST2_LLD, lastRow - 1))
+                            && (it2.GetInfo(POST2_LLD, col - 1) == it2.GetInfo(POST2_LLD, lastCol - 1))) {
                             // if both subforests are trees, map nodes
                             editMapping.Push(new int[] { row, col });
                             row--;
@@ -1196,8 +1196,8 @@ namespace Barbar.TreeDistance.Distance
 
                             // continue with forest to the left of the popped
                             // subtree pair
-                            row = it1.getInfo(POST2_LLD, row - 1) + 1 - 1;
-                            col = it2.getInfo(POST2_LLD, col - 1) + 1 - 1;
+                            row = it1.GetInfo(POST2_LLD, row - 1) + 1 - 1;
+                            col = it2.GetInfo(POST2_LLD, col - 1) + 1 - 1;
                         }
                     }
                 }
@@ -1205,17 +1205,17 @@ namespace Barbar.TreeDistance.Distance
             return editMapping;
         }
 
-        private void forestDist(InfoTree ted1, InfoTree ted2, int i, int j, double[][] treedist, double[][] forestdist) {
-            forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] = 0;
-            for (int di = ted1.getInfo(POST2_LLD, i - 1) + 1; di <= i; di++) {
-                forestdist[di][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] = forestdist[di - 1][ted2.getInfo(POST2_LLD, j - 1) + 1 - 1] + costDel;
-                for (int dj = ted2.getInfo(POST2_LLD, j - 1) + 1; dj <= j; dj++) {
-                    forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj] = forestdist[ted1.getInfo(POST2_LLD, i - 1) + 1 - 1][dj - 1] + costIns;
+        private void ForestDist(InfoTree ted1, InfoTree ted2, int i, int j, double[][] treedist, double[][] forestdist) {
+            forestdist[ted1.GetInfo(POST2_LLD, i - 1) + 1 - 1][ted2.GetInfo(POST2_LLD, j - 1) + 1 - 1] = 0;
+            for (int di = ted1.GetInfo(POST2_LLD, i - 1) + 1; di <= i; di++) {
+                forestdist[di][ted2.GetInfo(POST2_LLD, j - 1) + 1 - 1] = forestdist[di - 1][ted2.GetInfo(POST2_LLD, j - 1) + 1 - 1] + costDel;
+                for (int dj = ted2.GetInfo(POST2_LLD, j - 1) + 1; dj <= j; dj++) {
+                    forestdist[ted1.GetInfo(POST2_LLD, i - 1) + 1 - 1][dj] = forestdist[ted1.GetInfo(POST2_LLD, i - 1) + 1 - 1][dj - 1] + costIns;
 
-                    if ((ted1.getInfo(POST2_LLD, di - 1) == ted1.getInfo(POST2_LLD, i - 1))
-                        && (ted2.getInfo(POST2_LLD, dj - 1) == ted2.getInfo(POST2_LLD, j - 1))) {
+                    if ((ted1.GetInfo(POST2_LLD, di - 1) == ted1.GetInfo(POST2_LLD, i - 1))
+                        && (ted2.GetInfo(POST2_LLD, dj - 1) == ted2.GetInfo(POST2_LLD, j - 1))) {
                         double costRen = 0;
-                        if (!(ted1.getInfo(POST2_LABEL, di - 1) == ted2.getInfo(POST2_LABEL, dj - 1))) {
+                        if (!(ted1.GetInfo(POST2_LABEL, di - 1) == ted2.GetInfo(POST2_LABEL, dj - 1))) {
                             costRen = costMatch;
                         }
                         forestdist[di][dj] = Math.Min(Math.Min(
@@ -1227,7 +1227,7 @@ namespace Barbar.TreeDistance.Distance
                         forestdist[di][dj] = Math.Min(Math.Min(
                             forestdist[di - 1][dj] + costDel,
                             forestdist[di][dj - 1] + costIns),
-                            forestdist[ted1.getInfo(POST2_LLD, di - 1) + 1 - 1][ted2.getInfo(POST2_LLD, dj - 1) + 1 - 1]
+                            forestdist[ted1.GetInfo(POST2_LLD, di - 1) + 1 - 1][ted2.GetInfo(POST2_LLD, dj - 1) + 1 - 1]
                                 + treedist[di][dj]);
                     }
                 }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -16,12 +16,12 @@ namespace Barbar.TreeDistance.Util
             get { return new ReadOnlyCollection<TreeNode>(m_Children); }
         }
 
-        public bool isRoot()
+        public bool IsRoot()
         {
             return m_Parent == null;
         }
 
-        public TreeNode getRoot()
+        public TreeNode GetRoot()
         {
             var root = this;
             while(root.m_Parent != null)
@@ -31,7 +31,7 @@ namespace Barbar.TreeDistance.Util
             return root;
         }
 
-        public int getLevel()
+        public int GetLevel()
         {
             var root = this;
             int level = 0;

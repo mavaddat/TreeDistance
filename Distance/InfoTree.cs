@@ -21,7 +21,7 @@ namespace Barbar.TreeDistance.Distance
 {
 
     /**
-     * Stores all needed information about a single tree in several indeces. 
+     * Stores all needed information about a single tree in several indices. 
      *
      * @author Mateusz Pawlik
      */
@@ -37,7 +37,7 @@ namespace Barbar.TreeDistance.Distance
         private const byte REVRIGHT = 5;
         private const byte REVHEAVY = 6;
 
-        // constants for indeces numbers
+        // constants for indices numbers
         public const byte POST2_SIZE = 0;
         public const byte POST2_KR_SUM = 1;
         public const byte POST2_REV_KR_SUM = 2;
@@ -67,7 +67,7 @@ namespace Barbar.TreeDistance.Distance
 
         // temporal variables
         private int sizeTmp = 0; // temporal value of size of a subtree
-        private int descSizesTmp = 0; // temporal value of sum of descendat sizes
+        private int descSizesTmp = 0; // temporal value of sum of descendant sizes
         private int krSizesSumTmp = 0; // temporal value of sum of key roots sizes
         private int revkrSizesSumTmp = 0; // temporal value of sum of reversed hey roots sizes
         private int preorderTmp = 0; // temporal value of preorder
@@ -82,7 +82,7 @@ namespace Barbar.TreeDistance.Distance
         private int leafCount = 0;
         private int treeSize = 0;
 
-        public static void main(string[] args) {
+        public static void Main(string[] _) {
 
         }
 
@@ -96,7 +96,7 @@ namespace Barbar.TreeDistance.Distance
          */
         public InfoTree(LblTree aInputTree, LabelDictionary aLd) {
             this.inputTree = aInputTree;
-            treeSize = inputTree.getNodeCount();
+            treeSize = inputTree.GetNodeCount();
 
             this.info = Arrays.Allocate<int>(16, treeSize);
             Arrays.Fill(info[POST2_PARENT], -1);
@@ -118,8 +118,8 @@ namespace Barbar.TreeDistance.Distance
             this.nodeType = Arrays.Allocate<bool>(3, treeSize);
             this.ld = aLd;
             this.currentNode = treeSize - 1;
-            gatherInfo(inputTree, -1);
-            postTraversalProcessing();
+            GatherInfo(inputTree, -1);
+            PostTraversalProcessing();
         }
 
         /**
@@ -127,15 +127,15 @@ namespace Barbar.TreeDistance.Distance
          * 
          * @return
          */
-        public int getSize() {
+        public int GetSize() {
             return treeSize;
         }
 
-        public bool ifNodeOfType(int postorder, int type) {
+        public bool IfNodeOfType(int postorder, int type) {
             return nodeType[type][postorder];
         }
 
-        public bool[] getNodeTypeArray(int type) {
+        public bool[] GetNodeTypeArray(int type) {
             return nodeType[type];
         }
 
@@ -147,7 +147,7 @@ namespace Barbar.TreeDistance.Distance
          * @param nodesPostorder postorder of a node
          * @return a value of requested information
          */
-        public int getInfo(int infoCode, int nodesPostorder) {
+        public int GetInfo(int infoCode, int nodesPostorder) {
             // return info under infoCode and nodesPostorder
             return info[infoCode][nodesPostorder];
         }
@@ -158,7 +158,7 @@ namespace Barbar.TreeDistance.Distance
          * @param infoCode
          * @return array with requested index
          */
-        public int[] getInfoArray(int infoCode) {
+        public int[] GetInfoArray(int infoCode) {
             return info[infoCode];
         }
 
@@ -170,7 +170,7 @@ namespace Barbar.TreeDistance.Distance
          * @param nodePostorder postorder of a node
          * @return  an array with relevant subtrees of a given node
          */
-        public int[] getNodeRelSubtrees(int pathType, int nodePostorder) {
+        public int[] GetNodeRelSubtrees(int pathType, int nodePostorder) {
             return relSubtrees[pathType][nodePostorder];
         }
 
@@ -180,7 +180,7 @@ namespace Barbar.TreeDistance.Distance
          * @param pathType
          * @return an array with a requested path
          */
-        public int[] getPath(int pathType) {
+        public int[] GetPath(int pathType) {
             return paths[pathType];
         }
 
@@ -189,7 +189,7 @@ namespace Barbar.TreeDistance.Distance
          * 
          * @return 
          */
-        public int getCurrentNode() {
+        public int GetCurrentNode() {
             return currentNode;
         }
 
@@ -198,7 +198,7 @@ namespace Barbar.TreeDistance.Distance
          * 
          * @param postorder 
          */
-        public void setCurrentNode(int postorder) {
+        public void SetCurrentNode(int postorder) {
             currentNode = postorder;
         }
 
@@ -212,7 +212,7 @@ namespace Barbar.TreeDistance.Distance
          * @param postorder
          * @return 
          */
-        private int gatherInfo(LblTree aT, int postorder) {
+        private int GatherInfo(LblTree aT, int postorder) {
             int currentSize = 0;
             int childrenCount = 0;
             int descSizes = 0;
@@ -242,7 +242,7 @@ namespace Barbar.TreeDistance.Distance
             while (e.Pointer.Children.Count > e.ChildrenIndex) {
                 childrenCount++;
 
-                postorder = gatherInfo((LblTree)e.Pointer.Children[e.ChildrenIndex], postorder);
+                postorder = GatherInfo((LblTree)e.Pointer.Children[e.ChildrenIndex], postorder);
                 e.ChildrenIndex++;
 
                 childrenPostorders.Add(postorder);
@@ -299,7 +299,7 @@ namespace Barbar.TreeDistance.Distance
             postorder++;
 
             // postorder
-            aT.setTmpData(postorder);
+            aT.SetTmpData(postorder);
 
             int currentDescSizes = descSizes + currentSize + 1;
             info[POST2_DESC_SUM][postorder] = (currentSize + 1) * (currentSize + 1 + 3) / 2 - currentDescSizes;
@@ -307,8 +307,8 @@ namespace Barbar.TreeDistance.Distance
             info[POST2_REV_KR_SUM][postorder] = revkrSizesSum + currentSize + 1;
 
             // POST2_LABEL
-            //labels[rootNumber] = ld.store(aT.getLabel());
-            info[POST2_LABEL][postorder] = ld.store(aT.getLabel());
+            //labels[rootNumber] = ld.Store(aT.GetLabel());
+            info[POST2_LABEL][postorder] = ld.Store(aT.GetLabel());
 
             // POST2_PARENT
             foreach (var i in childrenPostorders) {
@@ -373,7 +373,7 @@ namespace Barbar.TreeDistance.Distance
         /**
          * Gathers information, that couldn't be collected while tree traversal.
          */
-        private void postTraversalProcessing() {
+        private void PostTraversalProcessing() {
             int nc1 = treeSize;
             info[KR] = new int[leafCount];
             info[RKR] = new int[leafCount];
@@ -439,10 +439,10 @@ namespace Barbar.TreeDistance.Distance
             }
         }
 
-        public void setSwitched(bool value) {
+        public void SetSwitched(bool value) {
             switched = value;
         }
-        public bool isSwitched() {
+        public bool IsSwitched() {
             return switched;
         }
     }

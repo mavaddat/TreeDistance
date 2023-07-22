@@ -1,4 +1,4 @@
-﻿namespace Barbar.TreeDistance.Util
+namespace Barbar.TreeDistance.Util
 {
     public static class Extensions
     {

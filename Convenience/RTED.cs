@@ -37,9 +37,9 @@ namespace Barbar.TreeDistance.Convenience
          * @param tree2 second tree given in the bracket notation.
          * @return the tree edit distance between tree1 and tree2.
          */
-        public static double computeDistance(string tree1, string tree2) {
+        public static double ComputeDistance(string tree1, string tree2) {
             RTED_InfoTree_Opt rted = new RTED_InfoTree_Opt(1, 1, 1);
-            return rted.nonNormalizedTreeDist(LblTree.fromString(tree1), LblTree.fromString(tree2));
+            return rted.NonNormalizedTreeDist(LblTree.FromString(tree1), LblTree.FromString(tree2));
         }
 
         /**
@@ -52,9 +52,9 @@ namespace Barbar.TreeDistance.Convenience
          * @param costRen cost of renaming two nodes.
          * @return the tree edit distance between tree1 and tree2.
          */
-        public static double computeDistance(string tree1, string tree2, double costIns, double costDel, double costRen) {
+        public static double ComputeDistance(string tree1, string tree2, double costIns, double costDel, double costRen) {
             RTED_InfoTree_Opt rted = new RTED_InfoTree_Opt(costIns, costDel, costRen);
-            return rted.nonNormalizedTreeDist(LblTree.fromString(tree1), LblTree.fromString(tree2));
+            return rted.NonNormalizedTreeDist(LblTree.FromString(tree1), LblTree.FromString(tree2));
         }
 
         /**
@@ -80,7 +80,7 @@ namespace Barbar.TreeDistance.Convenience
          */
         public static Stack<int[]> computeMapping(string tree1, string tree2) {
             RTED_InfoTree_Opt rted = new RTED_InfoTree_Opt(1, 1, 1);
-            rted.nonNormalizedTreeDist(LblTree.fromString(tree1), LblTree.fromString(tree2));
+            rted.NonNormalizedTreeDist(LblTree.FromString(tree1), LblTree.FromString(tree2));
             return rted.computeEditMapping();
         }
 
@@ -110,7 +110,7 @@ namespace Barbar.TreeDistance.Convenience
          */
         public static Stack<int[]> computeMapping(string tree1, string tree2, double costIns, double costDel, double costRen) {
             RTED_InfoTree_Opt rted = new RTED_InfoTree_Opt(costIns, costDel, costRen);
-            rted.nonNormalizedTreeDist(LblTree.fromString(tree1), LblTree.fromString(tree2));
+            rted.NonNormalizedTreeDist(LblTree.FromString(tree1), LblTree.FromString(tree2));
             return rted.computeEditMapping();
         }
     }

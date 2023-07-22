@@ -65,27 +65,27 @@ namespace Barbar.TreeDistance.Util
             this.label = label;
         }
 
-        public void setLabel(string label) {
+        public void SetLabel(string label) {
             this.label = label;
         }
 
-        public string getLabel() {
+        public string GetLabel() {
             return label;
         }
 
-        public int getTreeID() {
-            if (isRoot()) {
+        public int GetTreeID() {
+            if (IsRoot()) {
                 return treeID;
             } else {
-                return ((LblTree)getRoot()).getTreeID();
+                return ((LblTree)GetRoot()).GetTreeID();
             }
         }
 
-        public void setTreeID(int treeID) {
-            if (isRoot()) {
+        public void SetTreeID(int treeID) {
+            if (IsRoot()) {
                 this.treeID = treeID;
             } else {
-                ((LblTree)getRoot()).setTreeID(treeID);
+                ((LblTree)GetRoot()).SetTreeID(treeID);
             }
         }
 
@@ -94,47 +94,47 @@ namespace Barbar.TreeDistance.Util
          * Methods can assume, that this date is null and should return it
          * to be null!
          */
-        public void setTmpData(Object tmpData) {
+        public void SetTmpData(Object tmpData) {
             this.tmpData = tmpData;
         }
 
-        public Object getTmpData() {
+        public Object GetTmpData() {
             return tmpData;
         }
 
-        public void prettyPrint() {
-            prettyPrint(false);
+        public void PrettyPrint() {
+            PrettyPrint(false);
         }
 
 
-        public void prettyPrint(bool printTmpData) {
-            for (int i = 0; i < getLevel(); i++) {
+        public void PrettyPrint(bool printTmpData) {
+            for (int i = 0; i < GetLevel(); i++) {
                 Console.Out.Write(TAB_STRING);
             }
-            if (!isRoot()) {
+            if (!IsRoot()) {
                 Console.Out.Write(BRANCH_STRING);
             } else {
-                if (getTreeID() != NO_TREE_ID) {
-                    Console.Out.WriteLine("treeID: " + getTreeID());
+                if (GetTreeID() != NO_TREE_ID) {
+                    Console.Out.WriteLine("treeID: " + GetTreeID());
                 }
                 Console.Out.Write(ROOT_STRING);
             }
-            Console.Out.Write(" '" + this.getLabel() + "' ");
+            Console.Out.Write(" '" + this.GetLabel() + "' ");
             if (printTmpData) {
-                Console.Out.WriteLine(getTmpData());
+                Console.Out.WriteLine(GetTmpData());
             } else {
                 Console.Out.WriteLine();
             }
             foreach(var child in Children) {
-                ((LblTree)child).prettyPrint(printTmpData);
+                ((LblTree)child).PrettyPrint(printTmpData);
             }
 
         }
 
-        public int getNodeCount() {
+        public int GetNodeCount() {
             int sum = 1;
             foreach (var child in Children) {
-                sum += ((LblTree)child).getNodeCount();
+                sum += ((LblTree)child).GetNodeCount();
             }
             return sum;
         }
@@ -148,28 +148,28 @@ namespace Barbar.TreeDistance.Util
          * @param s string representation of a tree. Format: "treeID:{root{...}}".
          * @return tree represented by s
          */
-        public static LblTree fromString(string s) {
-            int treeID = FormatUtilities.getTreeID(s);
+        public static LblTree FromString(string s) {
+            int treeID = FormatUtilities.GetTreeID(s);
             s = s.JavaSubstring(s.IndexOf(OPEN_BRACKET), s.LastIndexOf(CLOSE_BRACKET) + 1);
-            LblTree node = new LblTree(FormatUtilities.getRoot(s), treeID);
+            LblTree node = new LblTree(FormatUtilities.GetRoot(s), treeID);
             var c = FormatUtilities.getChildren(s);
             for (int i = 0; i < c.Count; i++) {
-                node.Add(fromString(c[i]));
+                node.Add(FromString(c[i]));
             }
             return node;
         }
 
         /**
-         * string representation of a tree. Reverse operation of {@link #fromString(string)}.
-         * treeID is NO_ID, it is skiped in the string representation.
+         * string representation of a tree. Reverse operation of {@link #FromString(string)}.
+         * treeID is NO_ID, it is skipped in the string representation.
          *
          * @return string representation of this tree
          *
          */
       public override string ToString() {
-            string res = OPEN_BRACKET + getLabel();
-            if ((getTreeID() >= 0) && (isRoot())) {
-                res = getTreeID() + ID_SEPARATOR + res;
+            string res = OPEN_BRACKET + GetLabel();
+            if ((GetTreeID() >= 0) && (IsRoot())) {
+                res = GetTreeID() + ID_SEPARATOR + res;
             }
             foreach (var child in Children) {
                 res += child.ToString();
@@ -181,9 +181,9 @@ namespace Barbar.TreeDistance.Util
         /**
          * Clear tmpData in subtree rooted in this node.
          */
-        //public void clearTmpData() {
+        //public void ClearTmpData() {
           //  for (Enumeration e = breadthFirstEnumeration(); e.hasMoreElements();) {
-            //    ((LblTree)e.nextElement()).setTmpData(null);
+            //    ((LblTree)e.nextElement()).SetTmpData(null);
             //}
         //}
 
@@ -192,7 +192,7 @@ namespace Barbar.TreeDistance.Util
          */
         public int CompareTo(LblTree other)
         {
-            return getLabel().CompareTo(other.getLabel());
+            return GetLabel().CompareTo(other.GetLabel());
         }
     }
 }
