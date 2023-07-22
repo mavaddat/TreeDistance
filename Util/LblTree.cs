@@ -152,7 +152,7 @@ namespace Barbar.TreeDistance.Util
             int treeID = FormatUtilities.GetTreeID(s);
             s = s.JavaSubstring(s.IndexOf(OPEN_BRACKET), s.LastIndexOf(CLOSE_BRACKET) + 1);
             LblTree node = new LblTree(FormatUtilities.GetRoot(s), treeID);
-            var c = FormatUtilities.getChildren(s);
+            var c = FormatUtilities.GetChildren(s);
             for (int i = 0; i < c.Count; i++) {
                 node.Add(FromString(c[i]));
             }

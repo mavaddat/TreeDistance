@@ -78,10 +78,10 @@ namespace Barbar.TreeDistance.Convenience
          * @param tree2 second tree given in the bracket notation.
          * @return minimal edit mapping.
          */
-        public static Stack<int[]> computeMapping(string tree1, string tree2) {
+        public static Stack<int[]> ComputeMapping(string tree1, string tree2) {
             RTED_InfoTree_Opt rted = new RTED_InfoTree_Opt(1, 1, 1);
             rted.NonNormalizedTreeDist(LblTree.FromString(tree1), LblTree.FromString(tree2));
-            return rted.computeEditMapping();
+            return rted.ComputeEditMapping();
         }
 
         /**
@@ -108,10 +108,10 @@ namespace Barbar.TreeDistance.Convenience
          * @param costRen cost of renaming two nodes.
          * @return minimal edit mapping.
          */
-        public static Stack<int[]> computeMapping(string tree1, string tree2, double costIns, double costDel, double costRen) {
+        public static Stack<int[]> ComputeMapping(string tree1, string tree2, double costIns, double costDel, double costRen) {
             RTED_InfoTree_Opt rted = new RTED_InfoTree_Opt(costIns, costDel, costRen);
             rted.NonNormalizedTreeDist(LblTree.FromString(tree1), LblTree.FromString(tree2));
-            return rted.computeEditMapping();
+            return rted.ComputeEditMapping();
         }
     }
 }

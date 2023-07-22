@@ -303,7 +303,7 @@ namespace Barbar.TreeDistance.Util
                 Console.Out.WriteLine(ted);
             }
             if (mapping) {
-                var editMapping = rted.computeEditMapping();
+                var editMapping = rted.ComputeEditMapping();
                 foreach (int[] nodeAlignment in editMapping) {
                     Console.Out.WriteLine(nodeAlignment[0] + "->" + nodeAlignment[1]);
                 }

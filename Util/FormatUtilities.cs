@@ -30,31 +30,31 @@ namespace Barbar.TreeDistance.Util
 
         /**
          * Parses line and returns contents of field number fieldNr, where fields
-         * are separated by seperator.
+         * are separated by separator.
          * 
          * @param fieldNr number of field you want to get; numbering starts with 0
          * @param line string to parse
-         * @param seperator field seperator
+         * @param separator field separator
          * @return if the field exists, the value of the field without 
          *         leading and tailing spaces is returned; if the field does not
          *         exist or the parameter line is null than null is returned
          */
         public static string GetField(int fieldNr, string line,
-            char seperator)
+            char separator)
         {
             if (line != null)
             {
                 int pos = 0;
                 for (int i = 0; i < fieldNr; i++)
                 {
-                    pos = line.IndexOf(seperator, pos);
+                    pos = line.IndexOf(separator, pos);
                     if (pos == -1)
                     {
                         return null;
                     }
                     pos++;
                 }
-                int pos2 = line.IndexOf(seperator, pos);
+                int pos2 = line.IndexOf(separator, pos);
                 string res;
                 if (pos2 == -1)
                 {
@@ -274,7 +274,7 @@ namespace Barbar.TreeDistance.Util
             }
         }
 
-        public static List<string> getChildren(string s)
+        public static List<string> GetChildren(string s)
         {
             if ((s != null) && (s.Length > 0) && s.StartsWith("{") && s.EndsWith("}"))
             {

@@ -1119,7 +1119,7 @@ namespace Barbar.TreeDistance.Distance
          *         in ted1 and A[1]=ted2.node is the postorderID in ted2. The
          *         postorderID of the empty node (insertion, deletion) is zero.
          */
-        public Stack<int[]> computeEditMapping() {
+        public Stack<int[]> ComputeEditMapping() {
 
             // initialize tree and forest distance arrays
             double[][] treedist = Arrays.Allocate<double>(size1 + 1, size2 + 1);
