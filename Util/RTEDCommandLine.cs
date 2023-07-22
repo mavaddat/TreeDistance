@@ -200,8 +200,8 @@ namespace Barbar.TreeDistance.Util
          */
         public void runCommandLine(string[] args) {
             rted = new RTED_InfoTree_Opt(1, 1, 1);
-
-            try {
+            try
+            {
                 for (int i = 0; i < args.Length; i++) {
                     if (args[i].Equals("--help") || args[i].Equals("-h")) {
                         Console.Out.WriteLine(helpMessage);
@@ -258,7 +258,8 @@ namespace Barbar.TreeDistance.Util
                     }
                 }
 
-            } catch (IndexOutOfRangeException e) {
+            } catch (IndexOutOfRangeException)
+            {
                 Console.Out.WriteLine("Too few arguments.");
                 Environment.Exit(0);
             }
@@ -316,17 +317,22 @@ namespace Barbar.TreeDistance.Util
          * @param ts2
          */
         private void parseTreesFromCommandLine(string ts1, string ts2) {
-            try {
+            try
+            {
                 lt1 = LblTree.fromString(ts1);
                 size1 = lt1.getNodeCount();
-            } catch (Exception e) {
+            } catch (Exception)
+            {
                 Console.Out.WriteLine("TREE1 argument has wrong format");
                 Environment.Exit(0);
             }
-            try {
+
+            try
+            {
                 lt2 = LblTree.fromString(ts2);
                 size2 = lt2.getNodeCount();
-            } catch (Exception e) {
+            } catch (Exception)
+            {
                 Console.Out.WriteLine("TREE2 argument has wrong format");
                 Environment.Exit(0);
             }
@@ -340,17 +346,22 @@ namespace Barbar.TreeDistance.Util
          * @param fs2
          */
         private void parseTreesFromFiles(string fs1, string fs2) {
-            try {
+            try
+            {
                 lt1 = LblTree.fromString(new StreamReader(File.OpenRead(fs1)).ReadLine());
                 size1 = lt1.getNodeCount();
-            } catch (Exception e) {
+            } catch (Exception)
+            {
                 Console.Out.WriteLine("TREE1 argument has wrong format");
                 Environment.Exit(0);
             }
-            try {
+
+            try
+            {
                 lt2 = LblTree.fromString(new StreamReader(File.OpenRead(fs2)).ReadLine());
                 size2 = lt2.getNodeCount();
-            } catch (Exception e) {
+            } catch (Exception)
+            {
                 Console.Out.WriteLine("TREE2 argument has wrong format");
                 Environment.Exit(0);
             }
@@ -365,9 +376,11 @@ namespace Barbar.TreeDistance.Util
          * @param cms
          */
         private void setCosts(string cds, string cis, string cms) {
-            try {
+            try
+            {
                 rted.setCustomCosts(double.Parse(cds), double.Parse(cis), double.Parse(cms));
-            } catch (Exception e) {
+            } catch (Exception)
+            {
                 Console.Out.WriteLine("One of the costs has wrong format.");
                 Environment.Exit(0);
             }
@@ -399,9 +412,11 @@ namespace Barbar.TreeDistance.Util
          * @param ifSwitch if set to true the strategy will be applied to the currently bigger tree 
          */
         private void setStrategy(int str, bool ifSwitch) {
-            try {
+            try
+            {
                 rted.setCustomStrategy(str, ifSwitch);
-            } catch (Exception e) {
+            } catch (Exception)
+            {
                 Console.Out.WriteLine("Strategy has wrong format.");
                 Environment.Exit(0);
             }
@@ -413,9 +428,11 @@ namespace Barbar.TreeDistance.Util
          * @param strArrayFile path to the file with the strategy
          */
         private void setStrategy(string strArrayFile) {
-            try {
+            try
+            {
                 rted.setCustomStrategy(parseStrategyArrayString(strArrayFile));
-            } catch (Exception e) {
+            } catch (Exception)
+            {
                 Console.Out.WriteLine("Strategy has wrong format.");
                 Environment.Exit(0);
             }
@@ -440,7 +457,6 @@ namespace Barbar.TreeDistance.Util
             Scanner s;
             int value;
             StreamReader br;
-
             try {
                 br = new StreamReader(File.OpenRead(fileWithStrategyArray));
                 line = br.ReadLine();
@@ -477,7 +493,8 @@ namespace Barbar.TreeDistance.Util
                     Environment.Exit(0);
                 }
                 br.Close();
-            } catch (Exception e) {
+            } catch (Exception)
+            {
                 Console.Out.WriteLine("Something is wrong with strategy array file.");
                 Environment.Exit(0);
             }

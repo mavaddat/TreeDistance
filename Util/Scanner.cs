@@ -20,8 +20,7 @@ namespace Barbar.TreeDistance.Util
             }
             for(var i = m_Index; i <= m_Tokens.Length; i++)
             {
-                int value;
-                if (int.TryParse(m_Tokens[i], out value))
+                if (int.TryParse(m_Tokens[i], out _))
                 {
                     return true;
                 }
