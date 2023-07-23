@@ -179,3 +179,4 @@ $RECYCLE.BIN/
 
 _NCrunch*
 bin/*
+obj/*
