@@ -1,7 +1,0 @@
-C:\Users\B0649033\Source\Repos\TreeDistance\bin\Debug\RTED.exe.config
-C:\Users\B0649033\Source\Repos\TreeDistance\bin\Debug\RTED.exe
-C:\Users\B0649033\Source\Repos\TreeDistance\bin\Debug\RTED.pdb
-C:\Users\B0649033\Source\Repos\TreeDistance\obj\Debug\Barbar.TreeDistance.csproj.AssemblyReference.cache
-C:\Users\B0649033\Source\Repos\TreeDistance\obj\Debug\Barbar.TreeDistance.csproj.CoreCompileInputs.cache
-C:\Users\B0649033\Source\Repos\TreeDistance\obj\Debug\RTED.exe
-C:\Users\B0649033\Source\Repos\TreeDistance\obj\Debug\RTED.pdb
